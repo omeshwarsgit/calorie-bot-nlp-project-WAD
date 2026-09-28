@@ -449,71 +449,83 @@ async function handleDeleteMeal(id) {
   }
 }
 
-// --- CLEAR ALL MEALS (MODAL & TRIGGER BUTTONS) ---
-function initClearDayBtn() {
+// --- CLEAR ALL MEALS (GLOBAL & MODAL) ---
+window.handleClearMeals = function() {
   const clearModal = document.getElementById('clearConfirmModal');
-  const closeClearModalBtn = document.getElementById('closeClearModalBtn');
-  const cancelClearModalBtn = document.getElementById('cancelClearModalBtn');
-  const confirmClearAllBtn = document.getElementById('confirmClearAllBtn');
+  if (clearModal) {
+    clearModal.classList.add('active');
+  } else if (confirm('Are you sure you want to clear all logged meals for today?')) {
+    window.executeClearMeals();
+  }
+};
 
+window.closeClearModal = function() {
+  const clearModal = document.getElementById('clearConfirmModal');
+  if (clearModal) clearModal.classList.remove('active');
+};
+
+window.executeClearMeals = async function() {
+  const confirmBtn = document.getElementById('confirmClearAllBtn');
+  if (confirmBtn) {
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Clearing...';
+  }
+
+  try {
+    const res = await fetch('/api/clear', { method: 'POST' });
+    const data = await res.json();
+
+    if (confirmBtn) {
+      confirmBtn.disabled = false;
+      confirmBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+        </svg>
+        Yes, Clear All Meals
+      `;
+    }
+
+    if (data.success) {
+      AppState.summary = data.summary;
+      updateUI();
+      window.closeClearModal();
+      showToast('All meals cleared! Calorie counter reset to 0 kcal 🥗', 'success');
+    } else {
+      showToast('Failed to clear meals', 'error');
+    }
+  } catch (err) {
+    console.error('Clear meals error:', err);
+    if (confirmBtn) confirmBtn.disabled = false;
+    showToast('Network error resetting meals', 'error');
+  }
+};
+
+function initClearDayBtn() {
   const navClearBtn = document.getElementById('openClearModalNavBtn');
   const headerClearBtn = document.getElementById('openClearModalHeaderBtn');
   const footerClearBtn = document.getElementById('clearAllMealsBtn');
-
-  function openClearModal() {
-    if (clearModal) clearModal.classList.add('active');
-  }
-
-  function closeClearModal() {
-    if (clearModal) clearModal.classList.remove('active');
-  }
+  const closeClearModalBtn = document.getElementById('closeClearModalBtn');
+  const cancelClearModalBtn = document.getElementById('cancelClearModalBtn');
+  const confirmClearAllBtn = document.getElementById('confirmClearAllBtn');
+  const clearModal = document.getElementById('clearConfirmModal');
 
   [navClearBtn, headerClearBtn, footerClearBtn].forEach(btn => {
-    if (btn) btn.addEventListener('click', openClearModal);
+    if (btn) btn.addEventListener('click', window.handleClearMeals);
   });
 
   [closeClearModalBtn, cancelClearModalBtn].forEach(btn => {
-    if (btn) btn.addEventListener('click', closeClearModal);
+    if (btn) btn.addEventListener('click', window.closeClearModal);
   });
 
   if (clearModal) {
     clearModal.addEventListener('click', (e) => {
-      if (e.target === clearModal) closeClearModal();
+      if (e.target === clearModal) window.closeClearModal();
     });
   }
 
   if (confirmClearAllBtn) {
-    confirmClearAllBtn.addEventListener('click', async () => {
-      try {
-        confirmClearAllBtn.disabled = true;
-        confirmClearAllBtn.textContent = 'Clearing...';
-
-        const res = await fetch('/api/clear', { method: 'POST' });
-        const data = await res.json();
-
-        confirmClearAllBtn.disabled = false;
-        confirmClearAllBtn.innerHTML = `
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="3 6 5 6 21 6"/>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-          </svg>
-          Yes, Clear All Meals
-        `;
-
-        if (data.success) {
-          AppState.summary = data.summary;
-          updateUI();
-          closeClearModal();
-          showToast('All meals cleared! Calorie counter reset to 0 kcal 🥗', 'success');
-        } else {
-          showToast('Failed to clear meals', 'error');
-        }
-      } catch (err) {
-        console.error(err);
-        if (confirmClearAllBtn) confirmClearAllBtn.disabled = false;
-        showToast('Error resetting meals', 'error');
-      }
-    });
+    confirmClearAllBtn.addEventListener('click', window.executeClearMeals);
   }
 }
 
