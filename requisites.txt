@@ -1,0 +1,83 @@
+========================================================================
+NUTRIBOT - REQUISITES & SYSTEM REQUIREMENTS SPECIFICATION
+========================================================================
+Project: NLP-Based Intelligent Calorie Tracking Chatbot & Web Application
+Course: Web Application Development (WAD) - ISE 3
+Repository: calorie-bot-nlp-project-WAD
+========================================================================
+
+1. PROGRAMMING LANGUAGES USED
+------------------------------------------------------------------------
+- JavaScript (ES6+): Powers both the Node.js backend & frontend client logic
+- HTML5: Semantic layout, modals, SVG progress graphics
+- CSS3: Responsive design system, CSS variables, dark/light modes
+- JSON: Lightweight local database and REST API communication format
+- Markdown: Documentation (README.md, REQUISITES.md)
+
+2. RUNTIME ENVIRONMENT
+------------------------------------------------------------------------
+- Node.js: Version 16.0.0 or higher (v18+ or v22+ recommended)
+- npm: Version 8.0.0 or higher
+- Any modern web browser: Chrome, Edge, Safari, Firefox, Brave
+
+3. THIRD-PARTY LIBRARIES & DEPENDENCIES
+------------------------------------------------------------------------
+- ZERO EXTERNAL DEPENDENCIES (Zero npm packages required)
+- No "npm install" needed. Anyone downloading this can run it immediately!
+- Runs 100% on Node.js built-in standard modules.
+
+4. CORE NODE.JS MODULES USED (Standard Library)
+------------------------------------------------------------------------
+- "http"   (node:http)   : HTTP server creation, request routing, REST API
+- "fs"     (node:fs)     : Persistent JSON file storage & static file streaming
+- "path"   (node:path)   : Cross-platform directory & path resolution
+- "url"    (node:url)    : Parsing incoming URL parameters and query strings
+- "crypto" (node:crypto) : Cryptographically secure ID generation for meals
+
+5. BROWSER & CLIENT-SIDE WEB APIS USED
+------------------------------------------------------------------------
+- Fetch API: Asynchronous HTTP requests to backend REST API
+- Web Speech API: Voice-to-text recognition (SpeechRecognition)
+- Web Audio API: Dynamic sound synthesis for gentle response chimes
+- LocalStorage API: Saves dark/light theme preference across visits
+- SVG API: Dynamic circular progress ring rendering
+
+6. REQUIRED PROJECT FILE MANIFEST
+------------------------------------------------------------------------
+/ (Root)
+  |-- server.js               : Main application server and REST API handler
+  |-- package.json            : Project metadata and start scripts
+  |-- README.md               : General overview and user instructions
+  |-- REQUISITES.md           : Formatted requisites & architecture manual
+  |-- requisites.txt          : Plain text requisites specification (this file)
+  |-- .gitignore              : Git exclusions
+  |
+  +-- /data                   : Storage layer
+  |     |-- storage.js        : JSON persistence engine & analytics
+  |     +-- meals.json        : Persistent database for logged meals & goals
+  |
+  +-- /nlp                    : Natural Language Processing engine
+  |     |-- index.js          : NLP coordinator and intent dispatcher
+  |     |-- tokenizer.js      : Text normalization and quantity parser
+  |     |-- intentClassifier.js: Pattern-based intent recognizer
+  |     |-- entityExtractor.js: Food, meal type & calorie extractor
+  |     +-- foodDatabase.js   : 150+ item food nutrition and combos dictionary
+  |
+  +-- /public                 : Client-side web application
+        |-- index.html        : Main dashboard HTML interface
+        +-- /css
+        |     +-- style.css   : Complete styling & animations
+        +-- /js
+              |-- app.js      : Dashboard, state, and manual entry controller
+              +-- chat.js     : Chatbot dialog, entity cards, & voice STT
+
+7. HOW TO EXECUTE
+------------------------------------------------------------------------
+1. Open terminal inside the project directory:
+   cd "wad ise 3"
+2. Start the server:
+   npm start
+   (or: node server.js)
+3. Open your browser and visit:
+   http://localhost:3000
+========================================================================
