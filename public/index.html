@@ -479,42 +479,13 @@
       </div>
     </div>
 
-    <!-- CLEAR CONFIRMATION MODAL -->
-    <div class="modal-backdrop" id="clearConfirmModal">
-      <div class="modal-window modal-sm">
-        <div class="modal-header">
-          <div class="modal-title-wrap">
-            <div class="modal-badge-icon" style="background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.3);">🗑️</div>
-            <div>
-              <h3>Clear All Meals?</h3>
-              <p class="modal-subtitle">Reset today's food log & calories</p>
-            </div>
-          </div>
-          <button class="btn-close-modal" id="closeClearModalBtn" onclick="closeClearModal()">&times;</button>
-        </div>
-        <div style="padding: 10px 0 16px; color: var(--text-muted); font-size: 0.88rem; line-height: 1.5;">
-          Are you sure you want to clear all logged meals for today? Your total calories, protein, carbs, and fats will be reset to <strong>0 kcal</strong>.
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-ghost" id="cancelClearModalBtn" onclick="closeClearModal()">Cancel</button>
-          <button type="button" class="btn btn-primary" id="confirmClearAllBtn" onclick="executeClearMeals()" style="background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="3 6 5 6 21 6"/>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-            </svg>
-            Yes, Clear All Meals
-          </button>
-        </div>
-      </div>
-    </div>
-
     <!-- Toast Notification Container -->
     <div class="toast-container" id="toastContainer"></div>
 
   </div>
 
   <!-- Scripts with cache busting query string -->
-  <script src="js/app.js?v=2.1"></script>
-  <script src="js/chat.js?v=2.1"></script>
+  <script src="js/app.js?v=3.0"></script>
+  <script src="js/chat.js?v=3.0"></script>
 </body>
 </html>

@@ -431,102 +431,92 @@ function initGoalForm() {
   });
 }
 
-// --- DELETE MEAL ACTION ---
-async function handleDeleteMeal(id) {
-  if (!confirm('Are you sure you want to remove this meal entry?')) return;
+// --- DELETE SINGLE MEAL ENTRY (INSTANT & GLOBAL) ---
+window.handleDeleteMeal = async function(id) {
+  if (!id) return;
+
+  // Visual feedback: animate row
+  const row = document.getElementById(`meal-${id}`);
+  if (row) {
+    row.style.transition = 'all 0.25s ease';
+    row.style.opacity = '0.3';
+    row.style.transform = 'translateX(15px)';
+  }
 
   try {
-    const res = await fetch(`/api/meals/${id}`, { method: 'DELETE' });
+    const res = await fetch(`/api/meals/${encodeURIComponent(id)}`, { method: 'DELETE' });
     const data = await res.json();
     if (data.success) {
       AppState.summary = data.summary;
       updateUI();
-      showToast('Meal removed', 'success');
+      showToast('Meal removed from log', 'success');
+    } else {
+      if (row) {
+        row.style.opacity = '1';
+        row.style.transform = 'none';
+      }
+      showToast('Could not remove meal', 'error');
     }
   } catch (err) {
-    console.error(err);
-    showToast('Failed to delete meal', 'error');
-  }
-}
-
-// --- CLEAR ALL MEALS (GLOBAL & MODAL) ---
-window.handleClearMeals = function() {
-  const clearModal = document.getElementById('clearConfirmModal');
-  if (clearModal) {
-    clearModal.classList.add('active');
-  } else if (confirm('Are you sure you want to clear all logged meals for today?')) {
-    window.executeClearMeals();
+    console.error('Delete meal error:', err);
+    if (row) {
+      row.style.opacity = '1';
+      row.style.transform = 'none';
+    }
+    showToast('Failed to delete meal entry', 'error');
   }
 };
 
-window.closeClearModal = function() {
+// Also expose as local function alias
+const { handleDeleteMeal } = window;
+
+// --- CLEAR ALL MEALS (INSTANT & GLOBAL) ---
+window.handleClearMeals = async function() {
   const clearModal = document.getElementById('clearConfirmModal');
   if (clearModal) clearModal.classList.remove('active');
-};
 
-window.executeClearMeals = async function() {
-  const confirmBtn = document.getElementById('confirmClearAllBtn');
-  if (confirmBtn) {
-    confirmBtn.disabled = true;
-    confirmBtn.textContent = 'Clearing...';
-  }
+  const navClearBtn = document.getElementById('openClearModalNavBtn');
+  const headerClearBtn = document.getElementById('openClearModalHeaderBtn');
+  const footerClearBtn = document.getElementById('clearAllMealsBtn');
+
+  [navClearBtn, headerClearBtn, footerClearBtn].forEach(btn => {
+    if (btn) btn.disabled = true;
+  });
 
   try {
     const res = await fetch('/api/clear', { method: 'POST' });
     const data = await res.json();
 
-    if (confirmBtn) {
-      confirmBtn.disabled = false;
-      confirmBtn.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-        </svg>
-        Yes, Clear All Meals
-      `;
-    }
+    [navClearBtn, headerClearBtn, footerClearBtn].forEach(btn => {
+      if (btn) btn.disabled = false;
+    });
 
     if (data.success) {
       AppState.summary = data.summary;
       updateUI();
-      window.closeClearModal();
       showToast('All meals cleared! Calorie counter reset to 0 kcal 🥗', 'success');
     } else {
       showToast('Failed to clear meals', 'error');
     }
   } catch (err) {
     console.error('Clear meals error:', err);
-    if (confirmBtn) confirmBtn.disabled = false;
+    [navClearBtn, headerClearBtn, footerClearBtn].forEach(btn => {
+      if (btn) btn.disabled = false;
+    });
     showToast('Network error resetting meals', 'error');
   }
 };
+
+window.executeClearMeals = window.handleClearMeals;
 
 function initClearDayBtn() {
   const navClearBtn = document.getElementById('openClearModalNavBtn');
   const headerClearBtn = document.getElementById('openClearModalHeaderBtn');
   const footerClearBtn = document.getElementById('clearAllMealsBtn');
-  const closeClearModalBtn = document.getElementById('closeClearModalBtn');
-  const cancelClearModalBtn = document.getElementById('cancelClearModalBtn');
-  const confirmClearAllBtn = document.getElementById('confirmClearAllBtn');
-  const clearModal = document.getElementById('clearConfirmModal');
 
   [navClearBtn, headerClearBtn, footerClearBtn].forEach(btn => {
     if (btn) btn.addEventListener('click', window.handleClearMeals);
   });
-
-  [closeClearModalBtn, cancelClearModalBtn].forEach(btn => {
-    if (btn) btn.addEventListener('click', window.closeClearModal);
-  });
-
-  if (clearModal) {
-    clearModal.addEventListener('click', (e) => {
-      if (e.target === clearModal) window.closeClearModal();
-    });
-  }
-
-  if (confirmClearAllBtn) {
-    confirmClearAllBtn.addEventListener('click', window.executeClearMeals);
-  }
 }
 
 // --- TOAST UTILITY ---
