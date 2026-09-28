@@ -2,43 +2,30 @@
   "dailyGoal": 2000,
   "meals": [
     {
-      "id": "demo_1",
-      "foodName": "Oatmeal with Blueberries",
+      "id": "m_1790573425454_2182cc0a",
+      "foodName": "Banana",
       "mealType": "breakfast",
-      "quantity": 1,
-      "unit": "bowl",
-      "calories": 234,
-      "protein": 6.1,
-      "carbs": 48.4,
-      "fat": 3.0,
-      "timestamp": "2026-09-28T07:30:00.000Z",
+      "quantity": 2,
+      "unit": "medium",
+      "calories": 210,
+      "protein": 2.6,
+      "carbs": 54,
+      "fat": 0.8,
+      "timestamp": "2026-09-28T05:30:25.454Z",
       "source": "nlp_chat"
     },
     {
-      "id": "demo_2",
-      "foodName": "Boiled Eggs & Toast",
+      "id": "m_1790573424934_33c1bea0",
+      "foodName": "Eggs & Toast (2 Eggs + 1 Toast)",
       "mealType": "breakfast",
       "quantity": 1,
       "unit": "serving",
       "calories": 231,
       "protein": 15.2,
-      "carbs": 15.0,
+      "carbs": 15,
       "fat": 11.6,
-      "timestamp": "2026-09-28T07:45:00.000Z",
+      "timestamp": "2026-09-28T05:30:24.935Z",
       "source": "nlp_chat"
-    },
-    {
-      "id": "demo_3",
-      "foodName": "Grilled Chicken & Rice Bowl",
-      "mealType": "lunch",
-      "quantity": 1,
-      "unit": "bowl",
-      "calories": 370,
-      "protein": 35.2,
-      "carbs": 45.0,
-      "fat": 4.0,
-      "timestamp": "2026-09-28T12:30:00.000Z",
-      "source": "manual"
     }
   ]
 }
