@@ -85,7 +85,7 @@ const server = http.createServer(async (req, res) => {
     const query = (parsedUrl.query.q || '').toLowerCase();
     let foods = FOOD_DATABASE;
     if (query) {
-      foods = FOOD_DATABASE.filter(f => 
+      foods = FOOD_DATABASE.filter(f =>
         f.name.toLowerCase().includes(query) ||
         f.synonyms.some(s => s.toLowerCase().includes(query))
       );
