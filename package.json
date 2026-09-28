@@ -1,0 +1,21 @@
+{
+  "name": "wad-ise-3-nlp-calorie-tracker",
+  "version": "1.0.0",
+  "description": "NLP-Based Intelligent Chatbot Integrated with Node.js and JavaScript Application for Calorie Tracking with Manual Entry",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "nlp",
+    "chatbot",
+    "calorie-tracker",
+    "nodejs",
+    "javascript",
+    "health",
+    "nutrition"
+  ],
+  "author": "Antigravity",
+  "license": "ISC"
+}

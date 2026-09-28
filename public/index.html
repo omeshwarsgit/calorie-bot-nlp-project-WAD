@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NutriBot - NLP-Based Intelligent Chatbot Integrated with Node.js and JavaScript for Calorie Tracking with Manual Entry">
+  <title>NutriBot | NLP Calorie Tracker</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dark-theme">
+  <!-- App Container -->
+  <div class="app-wrapper">
+    
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+      <div class="nav-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12A10 10 0 0 1 12 2z"/>
+            <path d="M12 6v6l4 2"/>
+            <path d="M8.5 8.5c1.5-1 3.5-1 5 0"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Nutri<span>Bot</span></h1>
+          <span class="brand-tagline">NLP Intelligent Calorie Tracker</span>
+        </div>
+      </div>
+
+      <div class="nav-date-box" id="currentDateDisplay">
+        <span class="live-dot"></span>
+        <span id="navDateText">Today</span>
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn btn-outline" id="openGoalModalBtn" title="Set Daily Calorie Target">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="12" r="6"/>
+            <circle cx="12" cy="12" r="2"/>
+          </svg>
+          <span class="btn-text">Goal: <strong id="headerGoalDisplay">2000 kcal</strong></span>
+        </button>
+
+        <button class="btn btn-primary" id="openManualEntryBtn" title="Manual Food Entry">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span class="btn-text">Manual Entry</span>
+        </button>
+
+        <button class="btn btn-ghost icon-only" id="themeToggleBtn" aria-label="Toggle Theme" title="Switch Theme">
+          <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area: 2 Columns Grid -->
+    <main class="main-layout">
+
+      <!-- LEFT COLUMN: Dashboard & Meals Management -->
+      <section class="dashboard-column">
+        
+        <!-- Calorie Hero Overview Card -->
+        <div class="card hero-calorie-card">
+          <div class="card-header">
+            <div>
+              <span class="section-label">DAILY NUTRITION DASHBOARD</span>
+              <h2 class="card-title">Caloric Balance</h2>
+            </div>
+            <div class="badge badge-success" id="progressStatusBadge">On Track</div>
+          </div>
+
+          <div class="hero-body">
+            <!-- Circular Progress Ring -->
+            <div class="circular-progress-wrap">
+              <svg class="progress-ring" width="180" height="180" viewBox="0 0 180 180">
+                <circle class="ring-bg" cx="90" cy="90" r="74" stroke-width="14" fill="transparent"/>
+                <circle class="ring-fill" id="calorieProgressRing" cx="90" cy="90" r="74" stroke-width="14" fill="transparent"
+                  stroke-dasharray="465" stroke-dashoffset="465"/>
+              </svg>
+              <div class="ring-content">
+                <span class="ring-number" id="consumedCaloriesNum">0</span>
+                <span class="ring-unit">kcal consumed</span>
+                <span class="ring-percentage" id="caloriePercentageDisplay">0%</span>
+              </div>
+            </div>
+
+            <!-- Key Metric Stats Grid -->
+            <div class="metric-stats-grid">
+              <div class="stat-box">
+                <span class="stat-label">Daily Target</span>
+                <span class="stat-value" id="targetCaloriesVal">2000 <small>kcal</small></span>
+              </div>
+              <div class="stat-box highlight">
+                <span class="stat-label">Remaining</span>
+                <span class="stat-value" id="remainingCaloriesVal">2000 <small>kcal</small></span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Meals Logged</span>
+                <span class="stat-value" id="mealsLoggedCount">0</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Burn Est.</span>
+                <span class="stat-value" id="burnEstimateVal">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Macro Nutrients Bar Breakdown -->
+          <div class="macros-section">
+            <h3 class="subsection-title">Macronutrient Targets</h3>
+            <div class="macro-grid">
+              <!-- Protein -->
+              <div class="macro-card macro-protein">
+                <div class="macro-info">
+                  <span class="macro-name">🥩 Protein</span>
+                  <span class="macro-amount"><strong id="proteinVal">0</strong>g / 130g</span>
+                </div>
+                <div class="macro-progress-bar">
+                  <div class="bar-fill" id="proteinBar" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <!-- Carbs -->
+              <div class="macro-card macro-carbs">
+                <div class="macro-info">
+                  <span class="macro-name">🌾 Carbs</span>
+                  <span class="macro-amount"><strong id="carbsVal">0</strong>g / 220g</span>
+                </div>
+                <div class="macro-progress-bar">
+                  <div class="bar-fill" id="carbsBar" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <!-- Fats -->
+              <div class="macro-card macro-fat">
+                <div class="macro-info">
+                  <span class="macro-name">🥑 Fats</span>
+                  <span class="macro-amount"><strong id="fatVal">0</strong>g / 65g</span>
+                </div>
+                <div class="macro-progress-bar">
+                  <div class="bar-fill" id="fatBar" style="width: 0%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Meals Timeline & Log Card -->
+        <div class="card meals-card">
+          <div class="card-header">
+            <div>
+              <span class="section-label">LOGGED INTAKE</span>
+              <h2 class="card-title">Today's Meals</h2>
+            </div>
+            <div class="meal-filter-tabs" id="mealFilterTabs">
+              <button class="tab-btn active" data-filter="all">All</button>
+              <button class="tab-btn" data-filter="breakfast">Breakfast</button>
+              <button class="tab-btn" data-filter="lunch">Lunch</button>
+              <button class="tab-btn" data-filter="dinner">Dinner</button>
+              <button class="tab-btn" data-filter="snack">Snacks</button>
+            </div>
+          </div>
+
+          <!-- Meals List Container -->
+          <div class="meals-list" id="mealsListContainer">
+            <!-- Dynamically populated via app.js -->
+            <div class="empty-state" id="emptyMealsState">
+              <div class="empty-icon">🍽️</div>
+              <p class="empty-title">No meals logged yet today</p>
+              <p class="empty-subtitle">Use the NLP chatbot on the right or the Manual Entry form to log your first meal!</p>
+            </div>
+          </div>
+
+          <!-- Card Footer Actions -->
+          <div class="meals-card-footer">
+            <span class="items-count-text" id="mealsSummaryText">0 items recorded</span>
+            <div class="footer-btn-group">
+              <button class="btn btn-sm btn-ghost text-danger" id="clearAllMealsBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                Clear Day
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN: NLP Intelligent Chatbot -->
+      <section class="chatbot-column">
+        <div class="card chatbot-card">
+          
+          <!-- Chatbot Header -->
+          <div class="chat-header">
+            <div class="bot-avatar-box">
+              <div class="bot-avatar">🤖</div>
+              <span class="bot-pulse"></span>
+            </div>
+            <div class="bot-details">
+              <div class="bot-name-row">
+                <h3>NutriBot AI</h3>
+                <span class="badge badge-nlp">NLP Active</span>
+              </div>
+              <p class="bot-status-text">Natural Language Calorie Assistant</p>
+            </div>
+            <div class="chat-controls">
+              <button class="btn btn-ghost icon-only btn-sm" id="clearChatHistoryBtn" title="Clear Chat History">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="1 4 1 10 7 10"/>
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Suggestion Chips (NLP One-click prompts) -->
+          <div class="quick-prompts-bar">
+            <span class="prompt-chip" data-prompt="I ate 2 bananas for breakfast">🍌 2 Bananas</span>
+            <span class="prompt-chip" data-prompt="Had eggs and toast for breakfast">🍳 Eggs & Toast</span>
+            <span class="prompt-chip" data-prompt="Had burger and fries for lunch">🍔 Burger & Fries Combo</span>
+            <span class="prompt-chip" data-prompt="Ate dal chawal for dinner">🍛 Dal Chawal</span>
+            <span class="prompt-chip" data-prompt="Ate pizza and coke for lunch">🍕 Pizza & Coke</span>
+            <span class="prompt-chip" data-prompt="Log 400 calories for dinner">⚡ Log 400 kcal</span>
+            <span class="prompt-chip" data-prompt="How many calories in an avocado?">🥑 Avocado nutrition</span>
+            <span class="prompt-chip" data-prompt="How many calories did I eat today?">📊 Daily summary</span>
+          </div>
+
+          <!-- Chat Conversation Log -->
+          <div class="chat-messages-container" id="chatMessagesContainer">
+            <!-- Initial Bot Message -->
+            <div class="chat-bubble bot-bubble">
+              <div class="bubble-avatar">🤖</div>
+              <div class="bubble-content">
+                <p>Hello! I'm <strong>NutriBot</strong>, your NLP-powered calorie assistant. 🥗</p>
+                <p>You can chat naturally with me to log foods, track your daily target, or check nutrition values:</p>
+                <ul class="bubble-features-list">
+                  <li><em>"I ate 2 apples and a cup of oats for breakfast"</em></li>
+                  <li><em>"Had a slice of pizza and a coke for lunch"</em></li>
+                  <li><em>"Log 350 calories for snack"</em></li>
+                  <li><em>"How many calories left today?"</em></li>
+                </ul>
+                <div class="bubble-timestamp">Just now</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Typing Indicator -->
+          <div class="typing-indicator" id="chatTypingIndicator">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="typing-text">NutriBot is analyzing with NLP...</span>
+          </div>
+
+          <!-- Voice Listening Feedback Banner (Hidden by default) -->
+          <div class="voice-listening-banner" id="voiceListeningBanner">
+            <span class="mic-wave"></span>
+            <span class="voice-text">Listening... Speak now (e.g. "I ate 2 bananas for breakfast")</span>
+            <button class="btn-cancel-voice" id="cancelVoiceBtn">Cancel</button>
+          </div>
+
+          <!-- Chat Input Bar -->
+          <form class="chat-input-form" id="chatInputForm">
+            <button type="button" class="btn-voice" id="voiceInputBtn" title="Speak with Voice Input (Speech-to-Text)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </button>
+
+            <input 
+              type="text" 
+              id="chatTextInput" 
+              class="chat-input" 
+              placeholder="Type what you ate or ask a question... (e.g. 2 eggs and toast)" 
+              autocomplete="off"
+              required
+            >
+
+            <button type="submit" class="btn btn-send" id="chatSendBtn" title="Send Message">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </form>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- MANUAL ENTRY MODAL -->
+    <div class="modal-backdrop" id="manualEntryModal">
+      <div class="modal-window">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <div class="modal-badge-icon">✍️</div>
+            <div>
+              <h3>Manual Calorie Entry</h3>
+              <p class="modal-subtitle">Log custom meals and snacks directly</p>
+            </div>
+          </div>
+          <button class="btn-close-modal" id="closeManualModalBtn">&times;</button>
+        </div>
+
+        <form class="modal-form" id="manualEntryForm">
+          <!-- Food Name with Autocomplete Lookup -->
+          <div class="form-group">
+            <label for="manualFoodName">Food Item Name <span class="req">*</span></label>
+            <div class="input-autocomplete-wrapper">
+              <input 
+                type="text" 
+                id="manualFoodName" 
+                placeholder="e.g. Homemade Pasta, Chicken Salad, Rice" 
+                required 
+                autocomplete="off"
+              >
+              <div class="autocomplete-dropdown" id="foodAutocompleteDropdown"></div>
+            </div>
+            <span class="field-hint">💡 Select from quick database or type your custom recipe</span>
+          </div>
+
+          <!-- Meal Type & Serving Quantity -->
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="manualMealType">Meal Category <span class="req">*</span></label>
+              <select id="manualMealType" required>
+                <option value="breakfast">🌅 Breakfast</option>
+                <option value="lunch">☀️ Lunch</option>
+                <option value="dinner">🌙 Dinner</option>
+                <option value="snack" selected>🍎 Snack / Beverage</option>
+              </select>
+            </div>
+
+            <div class="form-group flex-1">
+              <label for="manualQuantity">Quantity</label>
+              <div class="qty-unit-row">
+                <input type="number" id="manualQuantity" min="0.1" step="0.1" value="1" required>
+                <input type="text" id="manualUnit" placeholder="serving/cup" value="serving">
+              </div>
+            </div>
+          </div>
+
+          <!-- Calories (Required) -->
+          <div class="form-group">
+            <label for="manualCalories">Calories (kcal) <span class="req">*</span></label>
+            <div class="input-with-suffix">
+              <input type="number" id="manualCalories" min="0" placeholder="e.g. 350" required>
+              <span class="suffix">kcal</span>
+            </div>
+          </div>
+
+          <!-- Optional Macros Accordion / Expandable -->
+          <div class="macros-optional-box">
+            <div class="macros-toggle-header" id="toggleMacrosOptional">
+              <span>Optional Macronutrients (g)</span>
+              <span class="toggle-arrow">▾</span>
+            </div>
+            <div class="macros-optional-body" id="macrosOptionalBody">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="manualProtein">Protein</label>
+                  <div class="input-with-suffix">
+                    <input type="number" id="manualProtein" min="0" step="0.1" placeholder="0">
+                    <span class="suffix">g</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="manualCarbs">Carbs</label>
+                  <div class="input-with-suffix">
+                    <input type="number" id="manualCarbs" min="0" step="0.1" placeholder="0">
+                    <span class="suffix">g</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="manualFat">Fat</label>
+                  <div class="input-with-suffix">
+                    <input type="number" id="manualFat" min="0" step="0.1" placeholder="0">
+                    <span class="suffix">g</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Actions -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" id="cancelManualModalBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="saveManualEntryBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Add to Daily Log
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- SET GOAL MODAL -->
+    <div class="modal-backdrop" id="goalModal">
+      <div class="modal-window modal-sm">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <div class="modal-badge-icon">🎯</div>
+            <div>
+              <h3>Daily Calorie Target</h3>
+              <p class="modal-subtitle">Customize your nutrition goal</p>
+            </div>
+          </div>
+          <button class="btn-close-modal" id="closeGoalModalBtn">&times;</button>
+        </div>
+
+        <form class="modal-form" id="setGoalForm">
+          <div class="form-group">
+            <label for="goalInput">Daily Target (Calories)</label>
+            <div class="input-with-suffix">
+              <input type="number" id="goalInput" min="500" max="10000" step="50" value="2000" required>
+              <span class="suffix">kcal / day</span>
+            </div>
+            <span class="field-hint">Recommended: 1800 - 2500 kcal depending on activity</span>
+          </div>
+
+          <!-- Quick presets -->
+          <div class="goal-presets">
+            <button type="button" class="preset-btn" data-goal="1600">Weight Loss (1600)</button>
+            <button type="button" class="preset-btn" data-goal="2000">Maintenance (2000)</button>
+            <button type="button" class="preset-btn" data-goal="2500">Muscle Gain (2500)</button>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" id="cancelGoalModalBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Target</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+</html>
