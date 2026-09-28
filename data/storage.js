@@ -133,7 +133,8 @@ function addMeals(newMealsArray) {
 function deleteMeal(id) {
   const data = loadData();
   const initialLen = data.meals.length;
-  data.meals = data.meals.filter(m => m.id !== id);
+  const targetId = String(id).trim();
+  data.meals = data.meals.filter(m => String(m.id).trim() !== targetId);
   if (data.meals.length !== initialLen) {
     saveData(data);
     return true;

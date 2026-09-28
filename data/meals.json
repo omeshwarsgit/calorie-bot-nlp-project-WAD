@@ -1,31 +1,4 @@
 {
   "dailyGoal": 2000,
-  "meals": [
-    {
-      "id": "m_1790573425454_2182cc0a",
-      "foodName": "Banana",
-      "mealType": "breakfast",
-      "quantity": 2,
-      "unit": "medium",
-      "calories": 210,
-      "protein": 2.6,
-      "carbs": 54,
-      "fat": 0.8,
-      "timestamp": "2026-09-28T05:30:25.454Z",
-      "source": "nlp_chat"
-    },
-    {
-      "id": "m_1790573424934_33c1bea0",
-      "foodName": "Eggs & Toast (2 Eggs + 1 Toast)",
-      "mealType": "breakfast",
-      "quantity": 1,
-      "unit": "serving",
-      "calories": 231,
-      "protein": 15.2,
-      "carbs": 15,
-      "fat": 11.6,
-      "timestamp": "2026-09-28T05:30:24.935Z",
-      "source": "nlp_chat"
-    }
-  ]
+  "meals": []
 }
