@@ -151,7 +151,7 @@ function processNLP(text, context = {}) {
 
     case INTENTS.CLEAR_MEALS: {
       result.action = 'CLEAR_MEALS';
-      result.reply = `Cleared today's meal records. You're starting with a fresh plate! 🥗`;
+      result.reply = `All meals cleared successfully! Your daily calorie intake has been reset to 0 kcal. Starting with a fresh plate! 🥗`;
       break;
     }
 

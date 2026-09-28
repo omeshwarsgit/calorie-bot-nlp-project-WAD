@@ -54,6 +54,14 @@
           <span class="btn-text">Manual Entry</span>
         </button>
 
+        <button class="btn btn-outline text-danger" id="openClearModalNavBtn" title="Clear all meals logged today">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+          <span class="btn-text">Clear Meals</span>
+        </button>
+
         <button class="btn btn-ghost icon-only" id="themeToggleBtn" aria-label="Toggle Theme" title="Switch Theme">
           <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="5"/>
@@ -172,12 +180,21 @@
               <span class="section-label">LOGGED INTAKE</span>
               <h2 class="card-title">Today's Meals</h2>
             </div>
-            <div class="meal-filter-tabs" id="mealFilterTabs">
-              <button class="tab-btn active" data-filter="all">All</button>
-              <button class="tab-btn" data-filter="breakfast">Breakfast</button>
-              <button class="tab-btn" data-filter="lunch">Lunch</button>
-              <button class="tab-btn" data-filter="dinner">Dinner</button>
-              <button class="tab-btn" data-filter="snack">Snacks</button>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="meal-filter-tabs" id="mealFilterTabs">
+                <button class="tab-btn active" data-filter="all">All</button>
+                <button class="tab-btn" data-filter="breakfast">Breakfast</button>
+                <button class="tab-btn" data-filter="lunch">Lunch</button>
+                <button class="tab-btn" data-filter="dinner">Dinner</button>
+                <button class="tab-btn" data-filter="snack">Snacks</button>
+              </div>
+              <button class="btn btn-sm btn-ghost text-danger" id="openClearModalHeaderBtn" title="Clear all meals">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                Clear
+              </button>
             </div>
           </div>
 
@@ -245,6 +262,7 @@
             <span class="prompt-chip" data-prompt="Log 400 calories for dinner">⚡ Log 400 kcal</span>
             <span class="prompt-chip" data-prompt="How many calories in an avocado?">🥑 Avocado nutrition</span>
             <span class="prompt-chip" data-prompt="How many calories did I eat today?">📊 Daily summary</span>
+            <span class="prompt-chip" data-prompt="Clear all meals">🗑️ Clear all meals</span>
           </div>
 
           <!-- Chat Conversation Log -->
@@ -458,6 +476,35 @@
             <button type="submit" class="btn btn-primary">Save Target</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- CLEAR CONFIRMATION MODAL -->
+    <div class="modal-backdrop" id="clearConfirmModal">
+      <div class="modal-window modal-sm">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <div class="modal-badge-icon" style="background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.3);">🗑️</div>
+            <div>
+              <h3>Clear All Meals?</h3>
+              <p class="modal-subtitle">Reset today's food log & calories</p>
+            </div>
+          </div>
+          <button class="btn-close-modal" id="closeClearModalBtn">&times;</button>
+        </div>
+        <div style="padding: 10px 0 16px; color: var(--text-muted); font-size: 0.88rem; line-height: 1.5;">
+          Are you sure you want to clear all logged meals for today? Your total calories, protein, carbs, and fats will be reset to <strong>0 kcal</strong>.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="cancelClearModalBtn">Cancel</button>
+          <button type="button" class="btn btn-primary" id="confirmClearAllBtn" style="background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+            Yes, Clear All Meals
+          </button>
+        </div>
       </div>
     </div>
 

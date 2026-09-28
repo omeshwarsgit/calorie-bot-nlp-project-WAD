@@ -37,10 +37,11 @@ function classifyIntent(text) {
     return { intent: INTENTS.SET_GOAL, confidence: 0.95 };
   }
 
-  // 3. Clear/Reset Intent ("clear meals", "reset my log", "delete all entries")
-  const clearRegex = /\b(clear|reset|delete all|wipe|erase)\s+(my\s+)?(meals?|food|logs?|entries|today)/i;
-  if (clearRegex.test(normalized)) {
-    return { intent: INTENTS.CLEAR_MEALS, confidence: 0.92 };
+  // 3. Clear/Reset Intent ("clear meals", "clear all", "reset day", "delete all meals")
+  const clearRegex = /\b(clear|reset|delete|wipe|erase|empty|remove)\s+(all\s+)?(my\s+)?(all\s+)?(meals?|food|logs?|entries|today|day|history|intake)\b/i;
+  const standaloneClear = /^(clear\s*all|reset\s*all|clear\s*today|reset\s*today|reset\s*day|clear\s*day|clear\s*meals|start\s*over|empty\s*meals|delete\s*all)$/i;
+  if (clearRegex.test(normalized) || standaloneClear.test(normalized)) {
+    return { intent: INTENTS.CLEAR_MEALS, confidence: 0.95 };
   }
 
   // 4. Daily Summary / Intake status ("how many calories did I eat today", "calories left", "daily summary")
